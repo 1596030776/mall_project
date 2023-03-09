@@ -1,0 +1,21 @@
+server:
+  port: 9999
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: youlai-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: http://c.youlai.tech:8848
+        namespace: prod-namespace-id
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        file-extension: yaml
+        namespace: prod-namespace-id
+        shared-configs[0]:
+          data-id: youlai-common.yaml
+          namespace: prod-namespace-id
+          refresh: true
