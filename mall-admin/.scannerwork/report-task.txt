@@ -1,0 +1,6 @@
+projectKey=mall_admin
+serverUrl=http://localhost:9000
+serverVersion=8.9.10.61524
+dashboardUrl=http://localhost:9000/dashboard?id=mall_admin
+ceTaskId=AYb0io3J4IL6lUo-A9JA
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AYb0io3J4IL6lUo-A9JA

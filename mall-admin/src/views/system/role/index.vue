@@ -228,18 +228,11 @@ onMounted(() => {
     <div class="search">
       <el-form ref="queryFormRef" :model="queryParams" :inline="true">
         <el-form-item prop="keywords" label="关键字">
-          <el-input
-            v-model="queryParams.keywords"
-            placeholder="角色名称"
-            clearable
-            @keyup.enter="handleQuery"
-          />
+          <el-input v-model="queryParams.keywords" placeholder="角色名称" clearable @keyup.enter="handleQuery" />
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" :icon="Search" @click="handleQuery"
-            >搜索</el-button
-          >
+          <el-button type="primary" :icon="Search" @click="handleQuery">搜索</el-button>
           <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
         </el-form-item>
       </el-form>
@@ -247,27 +240,12 @@ onMounted(() => {
 
     <el-card>
       <template #header>
-        <el-button type="success" :icon="Plus" @click="handleAdd"
-          >新增</el-button
-        >
-        <el-button
-          type="danger"
-          :icon="Delete"
-          :disabled="ids.length === 0"
-          @click="handleDelete"
-          >删除</el-button
-        >
+        <el-button type="success" :icon="Plus" @click="handleAdd">新增</el-button>
+        <el-button type="danger" :icon="Delete" :disabled="ids.length === 0" @click="handleDelete">删除</el-button>
       </template>
 
-      <el-table
-        ref="dataTableRef"
-        v-loading="loading"
-        :data="roleList"
-        @selection-change="handleSelectionChange"
-        @row-click="handleRowClick"
-        highlight-current-row
-        border
-      >
+      <el-table ref="dataTableRef" v-loading="loading" :data="roleList" @selection-change="handleSelectionChange"
+        @row-click="handleRowClick" highlight-current-row border>
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="角色名称" prop="name" min-width="150" />
         <el-table-column label="角色编码" prop="code" width="150" />
@@ -285,19 +263,11 @@ onMounted(() => {
 
         <el-table-column label="操作" align="left">
           <template #default="scope">
-            <el-button
-              type="success"
-              link
-              @click.stop="showAllocationDialog(scope.row)"
-            >
+            <el-button type="success" link @click.stop="showAllocationDialog(scope.row)">
               资源分配
             </el-button>
 
-            <el-button
-              type="primary"
-              link
-              @click.stop="handleUpdate(scope.row)"
-            >
+            <el-button type="primary" link @click.stop="handleUpdate(scope.row)">
               编辑
             </el-button>
             <el-button type="danger" link @click.stop="handleDelete(scope.row)">
@@ -308,28 +278,13 @@ onMounted(() => {
       </el-table>
 
       <!-- pagination -->
-      <pagination
-        v-if="total > 0"
-        :total="total"
-        v-model:page="queryParams.pageNum"
-        v-model:limit="queryParams.pageSize"
-        @pagination="handleQuery"
-      />
+      <pagination v-if="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize"
+        @pagination="handleQuery" />
     </el-card>
 
     <!-- dialog -->
-    <el-dialog
-      :title="dialog.title"
-      v-model="dialog.visible"
-      width="500px"
-      @close="closeDialog"
-    >
-      <el-form
-        ref="dataFormRef"
-        :model="formData"
-        :rules="rules"
-        label-width="100px"
-      >
+    <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" @close="closeDialog">
+      <el-form ref="dataFormRef" :model="formData" :rules="rules" label-width="100px">
         <el-form-item label="角色名称" prop="name">
           <el-input v-model="formData.name" placeholder="请输入角色名称" />
         </el-form-item>
@@ -355,12 +310,7 @@ onMounted(() => {
         </el-form-item>
 
         <el-form-item label="排序" prop="sort">
-          <el-input-number
-            v-model="formData.sort"
-            controls-position="right"
-            :min="0"
-            style="width: 100px"
-          />
+          <el-input-number v-model="formData.sort" controls-position="right" :min="0" style="width: 100px" />
         </el-form-item>
       </el-form>
 
@@ -373,19 +323,9 @@ onMounted(() => {
     </el-dialog>
 
     <!-- assign permission dialog -->
-    <el-dialog
-      :title="'【' + checkedRole.name + '】资源分配'"
-      v-model="allocationDialogVisible"
-      width="800px"
-    >
+    <el-dialog :title="'【' + checkedRole.name + '】资源分配'" v-model="allocationDialogVisible" width="800px">
       <el-scrollbar max-height="600px" v-loading="loading">
-        <el-tree
-          ref="resourceRef"
-          node-key="value"
-          show-checkbox
-          :data="resourceOptions"
-          :default-expand-all="true"
-        >
+        <el-tree ref="resourceRef" node-key="value" show-checkbox :data="resourceOptions" :default-expand-all="true">
           <template #default="{ data }">
             {{ data.label }}
           </template>
@@ -394,9 +334,7 @@ onMounted(() => {
 
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="handleAllocationSubmit"
-            >确 定</el-button
-          >
+          <el-button type="primary" @click="handleAllocationSubmit">确 定</el-button>
           <el-button @click="closeAllocationDialog">取 消</el-button>
         </div>
       </template>

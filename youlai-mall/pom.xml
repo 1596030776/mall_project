@@ -9,6 +9,19 @@
     <version>2.2.0</version>
     <packaging>pom</packaging>
 
+    <profiles>
+        <profile>
+            <id>sonar</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <sonar.host.url>http://localhost:9000</sonar.host.url>
+                <sonar.login>db1bad266399a5235677adfc727f4e16c3c41fe1</sonar.login>
+            </properties>
+        </profile>
+    </profiles>
+
     <modules>
         <!-- 基础模块 -->
         <module>youlai-common</module>
@@ -380,6 +393,12 @@
                             </path>
                         </annotationProcessorPaths>
                     </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>8.0.0.63273</version>
                 </plugin>
             </plugins>
         </pluginManagement>
