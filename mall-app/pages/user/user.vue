@@ -158,6 +158,9 @@ export default {
 	computed: {
 		...mapGetters(['hasLogin', 'nickname', 'avatar','balance'])
 	},
+	onShow(){
+		
+	},
 	methods: {
 		/**
 		 * 统一跳转接口,拦截未登录路由

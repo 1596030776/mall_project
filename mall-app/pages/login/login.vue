@@ -4,13 +4,6 @@
 		<view class="back-btn yticon icon-zuojiantou-up" @click="navBack"></view>
 		<view class="right-top-sign"></view>
 		<view class="wrapper">
-			<!-- 小程序登录授权界面 -->
-			<!-- #ifdef MP -->
-			<button class="confirm-btn" @click.stop="getUserProfile">小程序登录授权</button>
-			<view class="tip">
-				温馨提示:未注册有来小店的用户,初次登录时将完成注册
-			</view>
-			<!-- #endif -->
 
 			<!-- H5、Android、IOS登录授权界面 -->
 			<!-- #ifndef MP -->
@@ -19,24 +12,30 @@
 			<view class="input-content">
 				<view class="input-item" style="position: relative;">
 					<text class="tit">手机号码</text>
-					<input :value="mobile" placeholder="请输入手机号码" maxlength="11" data-key="mobile"
+					<input :value="phoneNumber" placeholder="请输入手机号码" maxlength="11" data-key="phoneNumber"
 						@input="inputChange" />
-					<button :disabled="!isCorretPhoneNumber" class="sms-code-btn"
+					<!-- 					<button :disabled="!isCorretPhoneNumber" class="sms-code-btn"
 						:class="{correct_phone_number:isCorretPhoneNumber}" @click.prevent="getSmsCode">
 						{{countdown>0 ? `(${countdown}s)已发送` : '获取验证码'}}
-					</button>
+					</button> -->
 				</view>
 
 				<view class="input-item">
-					<text class="tit">验证码</text>
-					<input :value="verificationCode" placeholder="6位随机数字组合" placeholder-class="input-empty" maxlength="20"
-						data-key="verificationCode" @input="inputChange" @confirm="toLogin" />
+					<text class="tit">密码</text>
+					<input :value="password" placeholder="请输入密码" placeholder-class="input-empty" maxlength="20"
+						data-key="password" @input="inputChange" />
+				</view>
+
+				<view class="input-item">
+					<text class="tit">用户名</text>
+					<input :value="username" placeholder="请输入用户名" placeholder-class="input-empty" maxlength="20"
+						data-key="username" @input="inputChange" />
 				</view>
 			</view>
 			<button class="confirm-btn" @click="toLogin" :disabled="logining">登录</button>
-			<view class="tip">
+			<!-- 			<view class="tip">
 				默认手机号码/验证码: 17621590365/666666
-			</view>
+			</view> -->
 			<!-- #endif -->
 		</view>
 		<view class="register-section">
@@ -52,15 +51,19 @@
 	} from 'vuex';
 
 	import {
-		sendSmsCode
+		getUserInfo,
+		login
 	} from '@/api/user.js';
+	import {
+		log
+	} from 'util';
 
 	export default {
 		data() {
 			return {
-				mobile: '17621590365',
-				verificationCode: 666666,
-				password: undefined,
+				phoneNumber: '1234567890',
+				password: '123456',
+				username: '杨宗',
 				logining: false,
 				countdown: 0,
 				timer: null,
@@ -74,12 +77,10 @@
 			}
 		},
 		onLoad() {
-			// #ifdef MP
-			this.getCode()
-			// #endif
+
 		},
 		methods: {
-			...mapMutations(['login']),
+			...mapMutations(['SET_HAS_LOGIN','SET_NICKNAME','SET_AVATAR','SET_BALANCE','SET_MEMBERID']),
 			inputChange(e) {
 				const key = e.currentTarget.dataset.key;
 				this[key] = e.detail.value;
@@ -88,72 +89,22 @@
 				uni.navigateBack();
 			},
 			toRegist() {
-				this.$api.msg('去注册');
-			},
-			getUserProfile() {
-				uni.getUserProfile({
-					lang: 'zh_CN',
-					desc: '获取用户相关信息',
-					success: response => {
-						const {
-							encryptedData,
-							iv
-						} = response
-						this.login(encryptedData, iv)
-					}
-				})
-			},
-			async login(encryptedData, iv) {
-				this.logining = true;
-				this.$store.dispatch('user/login', {
-					code: this.code,
-					encryptedData: encryptedData,
-					iv: iv
-				}).then(res => {
-					this.$store.dispatch('user/getUserInfo');
-					uni.navigateBack()
-				}).catch(() => {
-					this.logining = false;
-				});
-			},
-
-			getCode() {
-				uni.login({
-					provider: 'weixin',
-					success: res => {
-						console.log('code:'+res.code)
-						this.code = res.code
-					},
-					fail: err => {
-						console.log(err)
-					}
+				uni.navigateTo({
+					url: '/pages/signup/signup'
 				})
 			},
 
 			//  #ifndef MP
-			getSmsCode() {
-				if (!this.countdown) {
-					this.countdown = 60;
-					this.timer = setInterval(() => {
-						this.countdown--;
-						if (this.countdown <= 0) {
-							clearInterval(this.timer)
-						}
-					}, 1000);
-
-					sendSmsCode(this.mobile).then(res => {
-						this.$api.msg('短信已发送');
-					})
-				}
-			},
 
 			async toLogin() {
 				this.logining = true;
 				this.$store.dispatch('user/login', {
-					code: this.verificationCode,
-					mobile: this.mobile
+					username: this.username,
+					password: this.password,
+					phoneNumber: this.phoneNumber
 				}).then(res => {
-					this.$store.dispatch('user/getUserInfo');
+					this.$store.dispatch('user/getUserInfo', this.username);
+					console.log("登录成功")
 					const pages = getCurrentPages();
 					if (pages.length > 1) {
 						uni.navigateBack()
@@ -168,6 +119,30 @@
 					this.logining = false;
 				});
 			},
+
+			// async toLogin() {
+			// 	this.logining = true;
+			// 	let result1;
+			// 	let result2;
+			// 	try {
+			// 		result1 = await login(this.username, this.password, this.phoneNumber)
+			// 		uni.showToast({
+			// 			title: result1.message
+			// 		})
+			// 		if (result1.success) {
+			// 			this.$store.state.hasLogin = true
+			// 			try {
+			// 				result2 = await getUserInfo(this.username)
+			// 				console.log(result2.data)
+			// 				if (result2.success) {
+			// 					this.SET_NICKNAME(this.username)
+			// 				}
+			// 			} catch (err) {}
+
+			// 			this.logining = false;
+			// 		}
+			// 	} catch (err) {}
+			// }
 			// #endif
 		}
 	};
@@ -312,7 +287,7 @@
 		height: 76upx;
 		line-height: 76upx;
 		border-radius: 50px;
-		margin-top: 70upx;
+		margin-top: 150upx;
 		background: $uni-color-primary;
 		color: #fff;
 		font-size: $font-lg;

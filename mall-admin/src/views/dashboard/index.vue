@@ -12,6 +12,10 @@ import RadarChart from './components/Chart/RadarChart.vue';
 
 import Project from './components/Project/index.vue';
 import Team from './components/Team/index.vue';
+
+import { ref } from 'vue'
+
+const visitNum = ref(1200);
 </script>
 
 <template>
@@ -27,7 +31,7 @@ import Team from './components/Team/index.vue';
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">访问数</div>
-            <div class="card-panel-num">1000</div>
+            <div class="card-panel-num">{{visitNum}}</div>
           </div>
         </div>
       </el-col>

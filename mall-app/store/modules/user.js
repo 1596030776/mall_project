@@ -6,9 +6,9 @@ import {
 
 const state = {
 	hasLogin: false,
-	nickname: '',
+	nickname: 'yz',
 	avatar: '',
-	balance: 0,
+	balance: 10000,
 	memberId: ''
 }
 
@@ -30,83 +30,91 @@ const mutations = {
 	}
 }
 
-const actions = {
-	//  #ifdef MP
-	login({
-		commit
-	}, data) {
-		const {
-			code,
-			encryptedData,
-			iv
-		} = data
-		return new Promise((resolve, reject) => {
-			login(code,encryptedData,iv).then(response => {
-				const {
-					access_token,
-					token_type
-				} = response.data
-				const token = token_type + " " + access_token
-				uni.setStorageSync('token', token)
-				commit('SET_HAS_LOGIN', true)
-				resolve()
-			}).catch(error => {
-				reject(error)
-			})
-		})
-	},
-	// #endif
-	
-	//  #ifndef MP
-	login({
-		commit
-	}, data) {
-		const {
-			mobile,
-			code
-		} = data
-		return new Promise((resolve, reject) => {
-			login(mobile,code).then(response => {
-				const {
-					access_token,
-					token_type
-				} = response.data
-				const token = token_type + " " + access_token
-				uni.setStorageSync('token', token)
-				commit('SET_HAS_LOGIN', true)
-				resolve()
-			}).catch(error => {
-				reject(error)
-			})
-		})
-	},
-	// #endif
+const actions = {	
+	// login({
+	// 	commit
+	// }, data) {
+	// 	const {
+	// 		mobile,
+	// 		code
+	// 	} = data
+	// 	return new Promise((resolve, reject) => {
+	// 		login(mobile,code).then(response => {
+	// 			const {
+	// 				access_token,
+	// 				token_type
+	// 			} = response.data
+	// 			const token = token_type + " " + access_token
+	// 			uni.setStorageSync('token', token)
+	// 			commit('SET_HAS_LOGIN', true)
+	// 			resolve()
+	// 		}).catch(error => {
+	// 			reject(error)
+	// 		})
+	// 	})
+	// },
 	
 
+	// // get user info
+	// getUserInfo({
+	// 	commit,
+	// 	state
+	// }) {
+	// 	return new Promise((resolve, reject) => {
+	// 		getUserInfo().then(response => {
+	// 			const {
+	// 				data
+	// 			} = response
+	// 			if (!data) {
+	// 				reject('Verification failed, please Login again.')
+	// 			}
+	// 			const {
+	// 				id,
+	// 				nickName,
+	// 				avatarUrl,
+	// 				balance
+	// 			} = data
+	// 			commit('SET_NICKNAME', nickName)
+	// 			commit('SET_AVATAR', avatarUrl)
+	// 			commit('SET_BALANCE', balance)
+	// 			commit('SET_MEMBERID', id)
+	// 			resolve(data)
+	// 		}).catch(error => {
+	// 			reject(error)
+	// 		})
+	// 	})
+	// },
+	
+	login({
+		commit
+	}, data) {
+		const {
+			username,
+			password,
+			phoneNumber
+		} = data
+		return new Promise((resolve, reject) => {
+			login(username,password,phoneNumber).then(response => {
+				commit('SET_HAS_LOGIN', true)
+				resolve()
+			}).catch(error => {
+				reject(error)
+			})
+		})
+	},
+	
+	
 	// get user info
 	getUserInfo({
 		commit,
-		state
-	}) {
+	}, username) {
 		return new Promise((resolve, reject) => {
-			getUserInfo().then(response => {
-				const {
-					data
-				} = response
-				if (!data) {
-					reject('Verification failed, please Login again.')
-				}
-				const {
-					id,
-					nickName,
-					avatarUrl,
-					balance
-				} = data
-				commit('SET_NICKNAME', nickName)
-				commit('SET_AVATAR', avatarUrl)
-				commit('SET_BALANCE', balance)
-				commit('SET_MEMBERID', id)
-				resolve(data)
+			getUserInfo(username).then(response => {
+				commit('SET_NICKNAME', response.data.username)
+				commit('SET_AVATAR', response.data.imageUrl)
+				commit('SET_BALANCE', response.data.account)
+				commit('SET_MEMBERID', response.data.id)
+				resolve()
 			}).catch(error => {
 				reject(error)
 			})
