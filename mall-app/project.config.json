@@ -37,11 +37,12 @@
     "userConfirmedBundleSwitch": false,
     "packNpmManually": false,
     "packNpmRelationList": [],
-    "minifyWXSS": true
+    "minifyWXSS": true,
+    "condition": false
   },
   "compileType": "miniprogram",
   "libVersion": "2.14.1",
-  "appid": "wxc40b68f983022706",
+  "appid": "wx74ac75a6eb9423ae",
   "projectname": "youlai-mall-weapp",
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},

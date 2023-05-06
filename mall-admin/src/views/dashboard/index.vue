@@ -1,5 +1,20 @@
 <script lang="ts">
-export default { name: 'Dashboard' };
+export default { 
+  name: 'Dashboard',
+  data() {
+    return {
+      visitNum: null,
+    };
+  },
+  methods: {
+    async refreshVisitNum() {
+      const response = await getVisitNum();
+    },
+  },
+  mounted() {
+    this.refreshVisitNum();
+  },
+   };
 </script>
 
 <script setup lang="ts">
@@ -14,8 +29,12 @@ import Project from './components/Project/index.vue';
 import Team from './components/Team/index.vue';
 
 import { ref } from 'vue'
+//api引用
+import { getVisitNum } from '@/api/getData';
 
-const visitNum = ref(1200);
+// const visitNum = ref(1200);
+
+
 </script>
 
 <template>
@@ -27,7 +46,7 @@ const visitNum = ref(1200);
       <el-col :xs="24" :sm="12" :lg="6" class="card-panel__col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-people">
-            <svg-icon icon-class="uv" class-name="card-panel-icon" />
+            <svg-icon icon-class="uv" class-name="card-panel-icon" @click="refreshVisitNum" />
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">访问数</div>
