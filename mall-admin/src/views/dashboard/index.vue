@@ -1,20 +1,5 @@
 <script lang="ts">
-export default { 
-  name: 'Dashboard',
-  data() {
-    return {
-      visitNum: null,
-    };
-  },
-  methods: {
-    async refreshVisitNum() {
-      const response = await getVisitNum();
-    },
-  },
-  mounted() {
-    this.refreshVisitNum();
-  },
-   };
+export default { name: 'Dashboard' };
 </script>
 
 <script setup lang="ts">
@@ -27,14 +12,17 @@ import RadarChart from './components/Chart/RadarChart.vue';
 
 import Project from './components/Project/index.vue';
 import Team from './components/Team/index.vue';
-
-import { ref } from 'vue'
-//api引用
-import { getVisitNum } from '@/api/getData';
-
-// const visitNum = ref(1200);
-
-
+import { onMounted, ref } from 'vue';
+import { getVisitNum } from '@/api/getData/index'
+import { number } from 'echarts';
+const visitNum = ref();
+async function toGetVisitNum () {
+  let res = await getVisitNum()
+  visitNum.value = res.data.data
+}
+onMounted(() => {
+  toGetVisitNum();
+})
 </script>
 
 <template>
@@ -46,7 +34,7 @@ import { getVisitNum } from '@/api/getData';
       <el-col :xs="24" :sm="12" :lg="6" class="card-panel__col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-people">
-            <svg-icon icon-class="uv" class-name="card-panel-icon" @click="refreshVisitNum" />
+            <svg-icon icon-class="uv" class-name="card-panel-icon" />
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">访问数</div>
@@ -107,30 +95,15 @@ import { getVisitNum } from '@/api/getData';
     <!-- Echarts 图表 -->
     <el-row :gutter="40" style="margin-top: 20px">
       <el-col :sm="24" :lg="8" class="card-panel__col">
-        <BarChart
-          id="barChart"
-          height="400px"
-          width="100%"
-          class="chart-container"
-        />
+        <BarChart id="barChart" height="400px" width="100%" class="chart-container" />
       </el-col>
 
       <el-col :xs="24" :sm="12" :lg="8" class="card-panel__col">
-        <PieChart
-          id="pieChart"
-          height="400px"
-          width="100%"
-          class="chart-container"
-        />
+        <PieChart id="pieChart" height="400px" width="100%" class="chart-container" />
       </el-col>
 
       <el-col :xs="24" :sm="12" :lg="8" class="card-panel__col">
-        <RadarChart
-          id="radarChart"
-          height="400px"
-          width="100%"
-          class="chart-container"
-        />
+        <RadarChart id="radarChart" height="400px" width="100%" class="chart-container" />
       </el-col>
     </el-row>
   </div>
@@ -231,6 +204,7 @@ import { getVisitNum } from '@/api/getData';
 
     .icon-message {
       color: #36a3f7;
+
       .svg-icon {
         width: 4em !important;
         height: 4em !important;

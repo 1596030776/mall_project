@@ -6,7 +6,6 @@ import useStore from '@/store';
 // 创建 axios 实例
 const service = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
-  //baseURL:"http://121.199.1.81:8080",
   timeout: 50000,
   headers: { 'Content-Type': 'application/json;charset=utf-8' },
 });

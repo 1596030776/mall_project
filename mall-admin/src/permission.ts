@@ -7,8 +7,8 @@ NProgress.configure({ showSpinner: false }); // 进度环显示/隐藏
 // 白名单路由
 const whiteList = ['/login', '/auth-redirect'];
 
-router.beforeEach(async (to, from, next) => {//路由守卫，所有路由的跳转都要进过permission.ts
-  NProgress.start();//进度条
+router.beforeEach(async (to, from, next) => {
+  NProgress.start();
   const { user, permission } = useStore();
   const hasToken = user.token;
   if (hasToken) {
@@ -36,7 +36,7 @@ router.beforeEach(async (to, from, next) => {//路由守卫，所有路由的跳
         } catch (error) {
           // 移除 token 并跳转登录页
           await user.resetToken();
-          next(`/login?redirect=${to.path}`);   //记录用户原本想去的页面
+          next(`/login?redirect=${to.path}`);
           NProgress.done();
         }
       }

@@ -27,12 +27,15 @@ export default ({ mode }: ConfigEnv): UserConfig => {
         [env.VITE_APP_BASE_API]: {
           // 线上API地址
           target: 'https://api.youlai.tech',
-          // 本地API地址
-          //target: 'http://localhost:9999',
           changeOrigin: true,
           rewrite: (path) =>
             path.replace(new RegExp('^' + env.VITE_APP_BASE_API), ''),
         },
+        '/myapi': {
+          target: 'http://121.199.1.81:8080/',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/myapi/, '') // 不可以省略rewrite
+        }
       },
     },
     resolve: {
