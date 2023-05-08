@@ -13,16 +13,31 @@ import RadarChart from './components/Chart/RadarChart.vue';
 import Project from './components/Project/index.vue';
 import Team from './components/Team/index.vue';
 import { onMounted, ref } from 'vue';
-import { getVisitNum } from '@/api/getData/index'
+import { getVisitNum,getOrderNum,getAllGoodsInfo } from '@/api/getData/index'
 import { number } from 'echarts';
 const visitNum = ref();
 async function toGetVisitNum () {
   let res = await getVisitNum()
   visitNum.value = res.data.data
 }
+
+const orderNum = ref();
+async function toGetOrderNum(){
+  let res = await getOrderNum()
+  orderNum.value=res.data.data
+}
+
+async function toGetAllGoodsInfo(){
+  let res=await getAllGoodsInfo();
+  console.log(res.data);
+}
 onMounted(() => {
   toGetVisitNum();
+  toGetOrderNum();
+  toGetAllGoodsInfo();
 })
+
+
 </script>
 
 <template>
@@ -73,7 +88,7 @@ onMounted(() => {
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">订单数</div>
-            <div class="card-panel-num">1000</div>
+            <div class="card-panel-num">{{ orderNum }}</div>
           </div>
         </div>
       </el-col>

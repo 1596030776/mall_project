@@ -4,3 +4,10 @@ import axios from 'axios';
 export function getVisitNum() {
     return axios.get('/myapi/mall/getVisitNum')
 }
+
+export function getOrderNum(){
+    return axios.get('/myapi/mall/getOrderNum')
+}
+export function getAllGoodsInfo(){
+    return axios.get('/myapi/mall/getAllGoods')
+}
