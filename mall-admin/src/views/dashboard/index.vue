@@ -58,7 +58,7 @@ onMounted(() => {
         </div>
       </el-col>
 
-      <el-col :xs="24" :sm="12" :lg="6" class="card-panel__col">
+      <!-- <el-col :xs="24" :sm="12" :lg="6" class="card-panel__col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-message">
             <svg-icon icon-class="message" class-name="card-panel-icon" />
@@ -80,7 +80,7 @@ onMounted(() => {
             <div class="card-panel-num">1000</div>
           </div>
         </div>
-      </el-col>
+      </el-col> -->
       <el-col :xs="24" :sm="12" :lg="6" class="card-panel__col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-shopping">

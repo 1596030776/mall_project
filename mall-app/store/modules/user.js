@@ -1,12 +1,13 @@
 import {
 	login,
 	getUserInfo,
-	logout
+	logout,
+	addVisitNum
 } from '@/api/user'
 
 const state = {
 	hasLogin: false,
-	nickname: 'yz',
+	nickname: 'www',
 	avatar: '',
 	balance: 10000,
 	memberId: ''
@@ -100,6 +101,7 @@ const actions = {
 			}).catch(error => {
 				reject(error)
 			})
+			addVisitNum()
 		})
 	},
 	

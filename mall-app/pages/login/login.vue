@@ -50,10 +50,10 @@
 		mapMutations
 	} from 'vuex';
 
-	import {
-		getUserInfo,
-		login
-	} from '@/api/user.js';
+	// import {
+	// 	getUserInfo,
+	// 	login
+	// } from '@/api/user.js';
 	import {
 		log
 	} from 'util';

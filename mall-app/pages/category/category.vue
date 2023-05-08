@@ -19,12 +19,14 @@
 
 <script>
 import { getCategoryList } from '@/api/pms/category.js';
+import { getAllGoodsInfo } from '@/api/goods.js'
 export default {
 	data() {
 		return {
 			sizeCalcState: false,
 			tabScrollTop: 0,
 			currentId: 0,
+			glist:[],
 			flist: [],
 			slist: [],
 			tlist: []
@@ -34,44 +36,55 @@ export default {
 		this.loadData();
 	},
 	methods: {
+		// async loadData() {
+		// 	getCategoryList().then(response => {
+		// 		const categoryList = response.data;
+		// 		console.log(categoryList)
+		// 		categoryList.forEach(first => {
+		// 			this.flist.push(first);
+		// 			if (first.children) {
+		// 				first.children.forEach(second => {
+		// 					this.slist.push(second);
+		// 					if (second.children) {
+		// 						second.children.forEach(third => {
+		// 							this.tlist.push(third);
+		// 						});
+		// 					}
+		// 				});
+		// 			}
+		// 		});
+		// 		// 排序
+		// 		this.flist.sort(function(a, b) {
+		// 			return a.id - b.id;
+		// 		});
+
+		// 		this.slist.sort(function(a, b) {
+		// 			if (a.parentId == b.parentId) {
+		// 				return a.id - b.id;
+		// 			} else {
+		// 				return a.parentId - b.parentId;
+		// 			}
+		// 		});
+
+		// 		this.tlist.sort(function(a, b) {
+		// 			if (a.parentId == b.parentId) {
+		// 				return a.id - b.id;
+		// 			} else {
+		// 				return a.parentId - b.parentId;
+		// 			}
+		// 		});
+
+		// 		this.currentId = this.flist[0].id;
+		// 	});
+		// },
+		
 		async loadData() {
-			getCategoryList().then(response => {
+			getAllGoodsInfo().then(response => {
 				const categoryList = response.data;
-				categoryList.forEach(first => {
-					this.flist.push(first);
-					if (first.children) {
-						first.children.forEach(second => {
-							this.slist.push(second);
-							if (second.children) {
-								second.children.forEach(third => {
-									this.tlist.push(third);
-								});
-							}
-						});
-					}
+				console.log(categoryList)
+				categoryList.forEach(good => {
+					this.glist.push(good);
 				});
-				// 排序
-				this.flist.sort(function(a, b) {
-					return a.id - b.id;
-				});
-
-				this.slist.sort(function(a, b) {
-					if (a.parentId == b.parentId) {
-						return a.id - b.id;
-					} else {
-						return a.parentId - b.parentId;
-					}
-				});
-
-				this.tlist.sort(function(a, b) {
-					if (a.parentId == b.parentId) {
-						return a.id - b.id;
-					} else {
-						return a.parentId - b.parentId;
-					}
-				});
-
-				this.currentId = this.flist[0].id;
 			});
 		},
 		//一级分类点击

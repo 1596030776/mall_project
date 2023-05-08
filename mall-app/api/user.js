@@ -33,6 +33,13 @@ export function login(username, password, phoneNumber) {
 	})
 }
 
+export function addVisitNum() {
+	return request({
+		url: '/mall/orderVisitIncrease',
+		method: 'post',
+	})
+}
+
 export function register(username, password, phoneNumber) {
 	return request({
 		url: '/user/register',
@@ -58,15 +65,6 @@ export function logout() {
 	})
 }
 
-// export function getUserInfo() {
-// 	return request({
-// 		url: '/mall-ums/app-api/v1/members/me',
-// 		method: 'get',
-// 		headers: {
-// 			'auth': true
-// 		}
-// 	})
-// }
 export function getUserInfo(username) {
 	return request({
 		url: '/user/getUserInfo',
@@ -76,18 +74,3 @@ export function getUserInfo(username) {
 		}
 	})
 }
-// export function getUserInfo(name) {
-// 	uni.request({
-// 		url: `http://121.199.1.81:8080/user/getUserInfo`,
-// 		method:'POST',
-// 		data: {
-// 			username: name
-// 		},
-// 		success(res) {
-// 			console.log(res)
-// 		},
-// 		fail(err) {
-// 			console.log(err)
-// 		}
-// 	})
-// }
