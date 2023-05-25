@@ -20,8 +20,8 @@
 				<!-- <text class="coupon-tip">7折</text> -->
 			</view>
 			<view class="bot-row">
-				<text>销量: {{goodsInfo.sales}}</text>
-				<text>库存: {{selectedSku.stockNum}}</text>
+				<text>销量: 999+</text>
+				<text>库存: 1024</text>
 				<text>浏览量: 768</text>
 			</view>
 		</view>
@@ -239,33 +239,36 @@
 		async onLoad(options) {
 			console.log('========>> 进入商品详情页面, 路径:', this.$mp.page.route, '参数', options);
 			const goodsId = options.id
-			getSpuDetail(goodsId).then(response => {
-				const {
-					goodsInfo,
-					attributeList,
-					specList,
-					skuList
-				} = response.data;
-				this.goodsInfo = goodsInfo;
-				this.spuDetail=this.richImgAuto(goodsInfo.detail)
-				this.attributeList = attributeList;
-				this.specList = specList;
-				this.skuList = skuList;
+			this.goodsInfo.price = options.price * 100
+			this.goodsInfo.originPrice = options.price * 100 + 50000
+			this.goodsInfo.name = options.name
+			// getSpuDetail(goodsId).then(response => {
+			// 	const {
+			// 		goodsInfo,
+			// 		attributeList,
+			// 		specList,
+			// 		skuList
+			// 	} = response.data;
+			// 	this.goodsInfo = goodsInfo;
+			// 	this.spuDetail=this.richImgAuto(goodsInfo.detail)
+			// 	this.attributeList = attributeList;
+			// 	this.specList = specList;
+			// 	this.skuList = skuList;
 
-				// 默认选择规格的第一项
-				this.specList.forEach(item => {
-					if (item.values.length > 0) {
-						item.values[0].selected = true // 添加规格是否选中属性
-						this.selectedSpecValues.push(item.values[0])
-					}
-				})
+			// 	// 默认选择规格的第一项
+			// 	this.specList.forEach(item => {
+			// 		if (item.values.length > 0) {
+			// 			item.values[0].selected = true // 添加规格是否选中属性
+			// 			this.selectedSpecValues.push(item.values[0])
+			// 		}
+			// 	})
 
-				// 默认选择规格项ID的集合
-				const defaultSelectedSpecIds = this.selectedSpecValues.map(item => item.id)
-				// 默认规格项集合生成默认商品库存单元
-				this.selectedSku = this.skuList.filter(sku => sku.specIds.split('_').equals(
-					defaultSelectedSpecIds))[0]
-			});
+			// 	// 默认选择规格项ID的集合
+			// 	const defaultSelectedSpecIds = this.selectedSpecValues.map(item => item.id)
+			// 	// 默认规格项集合生成默认商品库存单元
+			// 	this.selectedSku = this.skuList.filter(sku => sku.specIds.split('_').equals(
+			// 		defaultSelectedSpecIds))[0]
+			// });
 		},
 		methods: {
 			 richImgAuto(html) {
@@ -325,7 +328,7 @@
 			buy() {
 				const skuId = this.selectedSku.id;
 				uni.navigateTo({
-					url: `/pages/order/createOrder?skuId=` + skuId + `&count=1`,
+					url: `/pages/order/createOrder?price=${this.goodsInfo.price}`,
 				});
 			},
 			// 添加至购物车

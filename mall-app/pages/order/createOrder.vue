@@ -116,12 +116,14 @@
 <script>
 	import {
 		confirm,
-		submit
+		//submit
 	} from '@/api/oms/order.js';
 
 	import {
 		list as addressList
 	} from '@/api/ums/address.js';
+	
+	import { addOrderNum } from '@/api/goods.js'
 
 	export default {
 		data() {
@@ -140,11 +142,16 @@
 				orderItems: []
 			};
 		},
+		async onLoad(options) {
+			this.payAmount = options.price
+			this.totalAmount = options.price
+		},
+		
 		onShow() {
-			const pages = getCurrentPages(); //获取应用页面栈
-			const  options= pages[pages.length - 1].options
-			console.log('========>> 进入创建订单页面, 路径:', this.$mp.page.route, '参数', options.skuId);
-			this.loadData(options);
+			//const pages = getCurrentPages(); //获取应用页面栈
+			//const  options= pages[pages.length - 1].options
+			//console.log('========>> 进入创建订单页面, 路径:', this.$mp.page.route, '参数', options.skuId);
+			//this.loadData(options);
 		},
 		methods: {
 			async loadData(param) {
@@ -205,33 +212,49 @@
 			},
 
 			// 订单提交
+			// submit() {
+			// 	if (!this.selectedAddress) {
+			// 		this.$api.msg('请选择收货地址');
+			// 		return;
+			// 	}
+
+			// 	const data = {
+			// 		orderToken: this.orderToken, // 订单提交令牌，防止重复提交
+			// 		orderItems: this.orderItems, // 订单商品
+			// 		totalAmount: this.totalAmount, // 订单商品总价，用于后台验价
+			// 		deliveryAddress: this.selectedAddress, // 收货地址
+			// 		remark: this.remark, // 订单备注
+			// 		payAmount: this.payAmount // 订单支付金额
+			// 	};
+			// 	console.log('========订单提交========', data);
+			// 	submit(data).then(response => {
+			// 		console.log('订单提交响应结果', response.data);
+
+			// 		const {
+			// 			orderId,
+			// 			orderSn
+			// 		} = response.data;
+			// 		uni.redirectTo({
+			// 			url: '/pages/money/pay?orderId=' + orderId + '&orderSn=' + orderSn +
+			// 				'&payAmount=' + this.payAmount
+			// 		});
+			// 	});
+			// }
 			submit() {
-				if (!this.selectedAddress) {
-					this.$api.msg('请选择收货地址');
-					return;
-				}
-
-				const data = {
-					orderToken: this.orderToken, // 订单提交令牌，防止重复提交
-					orderItems: this.orderItems, // 订单商品
-					totalAmount: this.totalAmount, // 订单商品总价，用于后台验价
-					deliveryAddress: this.selectedAddress, // 收货地址
-					remark: this.remark, // 订单备注
-					payAmount: this.payAmount // 订单支付金额
-				};
-				console.log('========订单提交========', data);
-				submit(data).then(response => {
-					console.log('订单提交响应结果', response.data);
-
-					const {
-						orderId,
-						orderSn
-					} = response.data;
-					uni.redirectTo({
-						url: '/pages/money/pay?orderId=' + orderId + '&orderSn=' + orderSn +
-							'&payAmount=' + this.payAmount
-					});
-				});
+				console.log('========订单提交========');
+				addOrderNum().then(()=>[
+					uni.showModal({
+					  title: '提交成功',
+					  showCancel: false,
+					  confirmText: '返回',
+					  success: function (res) {
+					    if (res.confirm) {
+					      console.log('用户点击确定按钮')
+						  uni.navigateBack()
+					    }
+					  }
+					})
+				])
 			}
 		}
 	};

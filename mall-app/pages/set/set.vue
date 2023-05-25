@@ -37,6 +37,9 @@
 </template>
 
 <script>
+	import {
+		minusOnlineNum
+	} from '@/api/user.js';
 	export default {
 		data() {
 			return {
@@ -53,7 +56,9 @@
 				    content: '确定要退出登录么',
 				    success: (e)=>{
 				    	if(e.confirm){
-				    		this.$store.dispatch('user/logout')
+				    		this.$store.dispatch('user/logout').then(res => {
+								minusOnlineNum()
+							})
 				    		setTimeout(()=>{
 				    			uni.navigateBack();
 				    		}, 200)

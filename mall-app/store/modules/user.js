@@ -7,7 +7,7 @@ import {
 
 const state = {
 	hasLogin: false,
-	nickname: 'www',
+	nickname: '',
 	avatar: '',
 	balance: 10000,
 	memberId: ''
@@ -112,11 +112,12 @@ const actions = {
 	}, username) {
 		return new Promise((resolve, reject) => {
 			getUserInfo(username).then(response => {
+				console.log(response.data)
 				commit('SET_NICKNAME', response.data.username)
 				commit('SET_AVATAR', response.data.imageUrl)
 				commit('SET_BALANCE', response.data.account)
 				commit('SET_MEMBERID', response.data.id)
-				resolve()
+				resolve(response)
 			}).catch(error => {
 				reject(error)
 			})
@@ -127,10 +128,10 @@ const actions = {
 	logout({
 		commit,
 		state,
-	}) {
+	}, username) {
 		
 		return new Promise((resolve, reject) => {
-			logout().then(() => {
+			logout(username).then(() => {
 				console.log('logout')
 				uni.removeStorageSync("userInfo")
 				uni.removeStorageSync("token")

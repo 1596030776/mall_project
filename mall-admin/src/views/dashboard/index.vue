@@ -13,7 +13,7 @@ import RadarChart from './components/Chart/RadarChart.vue';
 import Project from './components/Project/index.vue';
 import Team from './components/Team/index.vue';
 import { onMounted, ref } from 'vue';
-import { getVisitNum,getOrderNum,getAllGoodsInfo } from '@/api/getData/index'
+import { getVisitNum,getOrderNum,getAllGoodsInfo,getOnlineNum } from '@/api/getData/index'
 import { number } from 'echarts';
 const visitNum = ref();
 async function toGetVisitNum () {
@@ -24,7 +24,13 @@ async function toGetVisitNum () {
 const orderNum = ref();
 async function toGetOrderNum(){
   let res = await getOrderNum()
-  orderNum.value=res.data.data
+  orderNum.value = res.data.data
+}
+
+const onlineNum = ref();
+async function toGetOnlineNum(){
+  let res = await getOnlineNum()
+  onlineNum.value = res.data.data
 }
 
 async function toGetAllGoodsInfo(){
@@ -35,6 +41,7 @@ onMounted(() => {
   toGetVisitNum();
   toGetOrderNum();
   toGetAllGoodsInfo();
+  toGetOnlineNum();
 })
 
 
@@ -58,19 +65,19 @@ onMounted(() => {
         </div>
       </el-col>
 
-      <!-- <el-col :xs="24" :sm="12" :lg="6" class="card-panel__col">
+      <el-col :xs="24" :sm="12" :lg="6" class="card-panel__col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-message">
             <svg-icon icon-class="message" class-name="card-panel-icon" />
           </div>
           <div class="card-panel-description">
-            <div class="card-panel-text">消息数</div>
-            <div class="card-panel-num">1000</div>
+            <div class="card-panel-text">APP在线人数</div>
+            <div class="card-panel-num">{{onlineNum}}</div>
           </div>
         </div>
       </el-col>
 
-      <el-col :xs="24" :sm="12" :lg="6" class="card-panel__col">
+      <!-- <el-col :xs="24" :sm="12" :lg="6" class="card-panel__col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-money">
             <svg-icon icon-class="money" class-name="card-panel-icon" />
@@ -255,7 +262,7 @@ onMounted(() => {
     .card-panel-description {
       float: right;
       font-weight: bold;
-      margin: 26px 20px 0;
+      margin: 26px 15px 0;
 
       .card-panel-text {
         line-height: 18px;

@@ -12,18 +12,18 @@
 		<view class="carousel-section">
 			<!-- 标题栏和状态栏占位符 -->
 			<view class="titleNview-placing"></view>
-			<swiper class="carousel" circular @change="swiperChange">
+<!-- 			<swiper class="carousel" circular @change="swiperChange">
 				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item"
 					@click="navToDetailPage({title: item.title})">
 					<image :src="item.picUrl" />
 				</swiper-item>
-			</swiper>
+			</swiper> -->
 			<!-- 自定义swiper指示器 -->
-			<view class="swiper-dots">
+<!-- 			<view class="swiper-dots">
 				<text class="num">{{swiperCurrent+1}}</text>
 				<text class="sign">/</text>
 				<text class="num">{{swiperLength}}</text>
-			</view>
+			</view> -->
 		</view>
 		<!-- 分类 -->
 		<view class="cate-section">
@@ -49,12 +49,12 @@
 			</view>
 		</view>
 
-		<view class="ad-1">
+<!-- 		<view class="ad-1">
 			<image src="/static/temp/ad1.jpg" mode="scaleToFill"></image>
-		</view>
-
+		</view> -->
+		
 		<!-- 秒杀楼层 -->
-		<view class="seckill-section m-t">
+<!-- 		<view class="seckill-section m-t">
 			<view class="s-header">
 				<image class="s-img" src="/static/temp/secskill-img.jpg" mode="widthFix"></image>
 				<text class="tip">8点场</text>
@@ -73,7 +73,7 @@
 					</view>
 				</view>
 			</scroll-view>
-		</view>
+		</view> -->
 
 		<!-- 团购楼层 -->
 		<view class="f-header m-t">
@@ -106,6 +106,26 @@
 			</view>
 			<text class="yticon icon-you"></text>
 		</view>
+		
+		<view style="display: flex; margin: 20rpx; justify-content: space-around; flex-wrap: wrap;">
+			
+			<view class="item-box" v-for="item in goodsList" @click="navToDetailPage(item.id,item.goodsName,item.goodsPrice,item.message)">
+				<view style="width: 100%; height: 70%; background-color: aqua; border-radius: 10px;">
+					
+				</view>
+				<view style="font-size: 30rpx; margin: 20rpx; width:90%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+					{{item.goodsName}}
+				</view>
+				<view style="font-size: 20rpx; margin-left: 20rpx; margin-top: -15rpx; width:90%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: gray;">
+					{{item.message}}
+				</view>
+				<view style="font-size: 30rpx; margin: 20rpx; width:90%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: orange;">
+					￥{{item.goodsPrice}}
+				</view>
+				
+			</view>
+		</view>
+		
 	</view>
 </template>
 
@@ -116,50 +136,75 @@
 	import {
 		listSeckillingSpus
 	} from '@/api/pms/goods.js'
+	import {
+		getAllGoodsInfo
+	} from '@/api/goods.js'
+	import mounted from 'vue'
+	
 
 	export default {
 
 		data() {
 			return {
+				title: "hello",
 				swiperCurrent: 0,
 				swiperLength: 0,
 				carouselList: [],
 				goodsList: []
 			};
 		},
+		
+		mounted() {
+			this.toGetAllGoodsInfo()
+		},
 
 		onShow() {
-			this.loadData();
+			//this.loadData();
+			//this.toGetAllGoodsInfo()
 		},
 		methods: {
+			async toGetAllGoodsInfo() {
+				const that = this
+				getAllGoodsInfo().then(data => {
+					console.log(data)
+					this.goodsList = data
+				})
+			},
+			
 			/**
 			 * 请求静态数据只是为了代码不那么乱
 			 * 分次请求未作整合
 			 */
-			async loadData() {
-				const that = this
-				getAdvertList().then(response => {
-					const data = response.data
-					if (data) {
-						that.swiperLength = data.length
-						that.carouselList = data
-					}
-				})
+			// async loadData() {
+			// 	const that = this
+			// 	getAdvertList().then(response => {
+			// 		const data = response.data
+			// 		if (data) {
+			// 			that.swiperLength = data.length
+			// 			that.carouselList = data
+			// 		}
+			// 	})
 
-				listSeckillingSpus().then(response => {
-					that.goodsList = response.data || [];
-				})
-			},
+			// 	listSeckillingSpus().then(response => {
+			// 		that.goodsList = response.data || [];
+			// 	})
+			// },
 			//轮播图切换修改背景色
 			swiperChange(e) {
 				const index = e.detail.current;
 				this.swiperCurrent = index;
 			},
-			//详情页
-			navToDetailPage(id) {
+			// 详情页
+			// navToDetailPage(id) {
+			// 	//测试数据没有写id，用title代替
+			// 	uni.navigateTo({
+			// 		url: `/pages/product/product?id=${id}`
+			// 	})
+			// },
+			navToDetailPage(id, name, price, msg) {
 				//测试数据没有写id，用title代替
 				uni.navigateTo({
-					url: `/pages/product/product?id=${id}`
+					url: `/pages/product/product?id=${id}&name=${name}&price=${price}&msg=${msg}`
 				})
 			},
 		},
@@ -191,7 +236,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	/* #ifdef MP */
 	.mp-search-box {
 		position: absolute;
@@ -244,6 +289,14 @@
 
 	/* #endif */
 
+	.item-box {
+		width: 45%;
+		height: 500rpx;
+		font-size: 20rpx;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+		border-radius: 10px; 
+		margin-bottom: 20px;
+	}
 
 	page {
 		background: #f5f5f5;

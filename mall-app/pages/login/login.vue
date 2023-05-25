@@ -50,10 +50,10 @@
 		mapMutations
 	} from 'vuex';
 
-	// import {
-	// 	getUserInfo,
-	// 	login
-	// } from '@/api/user.js';
+	import {
+		addOnlineNum,
+		minusOnlineNum
+	} from '@/api/user.js';
 	import {
 		log
 	} from 'util';
@@ -80,7 +80,7 @@
 
 		},
 		methods: {
-			...mapMutations(['SET_HAS_LOGIN','SET_NICKNAME','SET_AVATAR','SET_BALANCE','SET_MEMBERID']),
+			...mapMutations(['SET_HAS_LOGIN', 'SET_NICKNAME', 'SET_AVATAR', 'SET_BALANCE', 'SET_MEMBERID']),
 			inputChange(e) {
 				const key = e.currentTarget.dataset.key;
 				this[key] = e.detail.value;
@@ -103,8 +103,12 @@
 					password: this.password,
 					phoneNumber: this.phoneNumber
 				}).then(res => {
-					this.$store.dispatch('user/getUserInfo', this.username);
-					console.log("登录成功")
+
+					this.$store.dispatch('user/getUserInfo', this.username).then(data => {
+						addOnlineNum()
+						console.log("登录成功")
+						console(data)
+					})
 					const pages = getCurrentPages();
 					if (pages.length > 1) {
 						uni.navigateBack()

@@ -8,6 +8,11 @@ export function getVisitNum() {
 export function getOrderNum(){
     return axios.get('/myapi/mall/getOrderNum')
 }
+
+export function getOnlineNum(){
+    return axios.get('/myapi/mall/getOnlineUserNum')
+}
+
 export function getAllGoodsInfo(){
     return axios.get('/myapi/mall/getAllGoods')
 }
