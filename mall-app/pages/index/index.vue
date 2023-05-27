@@ -110,7 +110,7 @@
 		<view style="display: flex; margin: 20rpx; justify-content: space-around; flex-wrap: wrap;">
 			
 			<view class="item-box" v-for="item in goodsList" @click="navToDetailPage(item.id,item.goodsName,item.goodsPrice,item.message)">
-				<view style="width: 100%; height: 70%; background-color: aqua; border-radius: 10px;">
+				<view style="width: 100%; height: 70%; background-color: gray; border-radius: 10px;">
 					
 				</view>
 				<view style="font-size: 30rpx; margin: 20rpx; width:90%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">

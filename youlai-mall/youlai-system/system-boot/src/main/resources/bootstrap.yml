@@ -1,5 +1,0 @@
-spring:
-  application:
-    name: youlai-system
-  profiles:
-    active: dev
